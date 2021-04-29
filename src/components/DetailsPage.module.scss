@@ -1,3 +1,11 @@
 .detailsPage {
-margin:auto
+    justify-content: center;
+display:flex;
+margin: 50px;
+img {
+    height: 300px;
+}
+div{
+    margin: 50px;
+}
 }

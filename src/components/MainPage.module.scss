@@ -1,0 +1,85 @@
+$paddingButton: 5px;
+@mixin buttonStyles {
+  padding: $paddingButton;
+  text-align: center;
+  border: 1px solid black;
+  width: 100px;
+  &:hover {
+    background-color: lightgreen;
+    cursor: pointer;
+  }
+}
+
+.mainPage {
+  margin: 20px 100px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  
+}
+
+.searchName{
+  margin: 5px 0 ;
+}
+
+.loading {
+  margin: 10px auto;
+  text-align: center;
+}
+
+.search {
+  @include buttonStyles;
+  border-radius: 100px;
+}
+
+.random {
+  @include buttonStyles;
+  border-radius: 5px;
+}
+
+.beerElementDiv {
+  display: flex;
+  padding: 5px;
+  border: solid 1px black;
+  border-radius: 10px;
+  margin: 20px 0;
+  div{
+      margin: 20px;
+  }
+
+  .beerImage {
+      text-align: center;
+      margin: auto;
+    img {
+      height: 100px;
+    }
+    min-width: 10%;
+  }
+  .text {
+max-width: 60%;
+  }
+  .arrow {
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    text-align: right;
+    margin: auto;
+    font-size: 105px;
+  }
+}
+
+.pagination{
+  justify-content: center;
+  display: flex;
+  div{
+    border: 1px solid black;
+    padding: 5px 10px;
+    &:hover {
+      background-color: lightgreen;
+      cursor: pointer;
+    }
+  }
+}
