@@ -17,11 +17,10 @@ $paddingButton: 5px;
 .buttons {
   display: flex;
   justify-content: space-between;
-  
 }
 
-.searchName{
-  margin: 5px 0 ;
+.searchName {
+  margin: 5px 0;
 }
 
 .loading {
@@ -45,20 +44,23 @@ $paddingButton: 5px;
   border: solid 1px black;
   border-radius: 10px;
   margin: 20px 0;
-  div{
-      margin: 20px;
+  div {
+    margin: 20px;
+
+    flex-grow: 1;
   }
 
   .beerImage {
-      text-align: center;
-      margin: auto;
+    text-align: center;
+    margin: auto;
+    width: 100px;
     img {
       height: 100px;
     }
-    min-width: 10%;
   }
   .text {
-max-width: 60%;
+    max-width: 60%;
+    text-align: left;
   }
   .arrow {
     a {
@@ -67,14 +69,15 @@ max-width: 60%;
     }
     text-align: right;
     margin: auto;
+    margin-right: 20px;
     font-size: 105px;
   }
 }
 
-.pagination{
+.pagination {
   justify-content: center;
   display: flex;
-  div{
+  div {
     border: 1px solid black;
     padding: 5px 10px;
     &:hover {
@@ -82,7 +85,7 @@ max-width: 60%;
       cursor: pointer;
     }
   }
-  .currentPaginationElement{
+  .currentPaginationElement {
     background-color: rgb(24, 153, 240);
   }
 }

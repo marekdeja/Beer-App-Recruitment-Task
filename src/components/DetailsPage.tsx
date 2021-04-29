@@ -1,7 +1,5 @@
-import { isEmpty } from "lodash";
-import { useState, CSSProperties, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router";
-import { useAppSelector } from "../redux/hooks";
 import { getSingleBeer } from "../service/beerApi";
 const styles = require("./DetailsPage.module.scss");
 
@@ -15,7 +13,7 @@ export const DetailsPage = () => {
         return fetchedData
     }
     fetchData().then(res => setBeer(res[0]))
-}, [])
+}, [beerId])
 
   return (
     <div className={styles.detailsPage}>
