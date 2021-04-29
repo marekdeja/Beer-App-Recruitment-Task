@@ -7,36 +7,19 @@ const styles = require("./DetailsPage.module.scss");
 
 export const DetailsPage = () => {
   const beerId: number = Number(useParams<{ id?: any }>().id);
-  const [beer, setBeer] = useState<any>({});
-  const beerArray = useAppSelector((state) => state.beerReducer);
+  const [beer, setBeer] = useState<any>(null);
 
   useEffect(() => {
-    //instead of calling API I am using redux state
-    const beerObject = beerArray.find((element: { id: any }) => {
-      console.log(element.id === beerId);
-      console.log(typeof beerId);
-      return element.id === beerId;
-    });
-    setBeer(beerObject);
-
-    if (!beerObject) {
-      //   setLoading(true);
-      const fetchData = async () => {
+    const fetchData = async () => {
         const fetchedData = await getSingleBeer(beerId);
-        return fetchedData;
-      };
-      fetchData().then((res) => {
-          console.log(res)
-        setBeer(res);
-      });
+        return fetchedData
     }
-    //   setLoading(false);
-
-    console.log(beerObject);
-  }, []);
+    fetchData().then(res => setBeer(res[0]))
+}, [])
 
   return (
     <div className={styles.detailsPage}>
+        {beer===null && <div>Loading...</div>}
       <div>{beer && <img src={beer.image_url} alt="Beer" />}</div>
       <div>
         <h1>{beer && beer.name} </h1>

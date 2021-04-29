@@ -1,9 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import { saveBeers } from "../redux/actions";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { getBeers, getBeersByName, getBeersByPage } from "../service/beerApi";
-import _, { isArray } from "lodash";
+import _ from "lodash";
 import { Link, useHistory } from "react-router-dom";
 
 const styles = require("./MainPage.module.scss");
@@ -13,21 +12,23 @@ export const MainPage = () => {
   const beerArray = useAppSelector((state) => state.beerReducer);
   const history = useHistory();
   const [searchName, setSearchName] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   useEffect(() => {
     if (_.isEmpty(beerArray)) {
-      setLoading(true);
       const fetchData = async () => {
         const fetchedData = await getBeers();
         return fetchedData;
       };
       fetchData().then((res) => {
         dispatch(saveBeers(res));
+        setLoading(false);
       });
+    } else {
       setLoading(false);
     }
-  }, []);
+  }, [beerArray, dispatch]);
 
   const getRandomNumber = () => {
     return Math.floor(Math.random() * beerArray.length) + 1;
@@ -43,6 +44,7 @@ export const MainPage = () => {
       };
       fetchData().then((res) => {
         dispatch(saveBeers(res));
+        setLoading(false);
       });
     } else {
       const fetchData = async () => {
@@ -51,22 +53,24 @@ export const MainPage = () => {
       };
       fetchData().then((res) => {
         dispatch(saveBeers(res));
+        setLoading(false);
       });
     }
-    setLoading(false);
   };
 
-  const handlePaginationOnClick = (pageNumber:number) => {
+  const handlePagination = (pageNumber: number) => {
     setLoading(true);
-      const fetchData = async () => {
-        const fetchedData = await getBeersByPage(pageNumber);
-        return fetchedData;
-      };
-      fetchData().then((res) => {
-        dispatch(saveBeers(res));
-      });
-      setLoading(false);
-    }
+    setSearchName("");
+    const fetchData = async () => {
+      const fetchedData = await getBeersByPage(pageNumber);
+      setCurrentPage(pageNumber);
+      return fetchedData;
+    };
+    fetchData().then((res) => {
+      dispatch(saveBeers(res));
+    });
+    setLoading(false);
+  };
 
   const printList = () => {
     return beerArray.map((element: any, index: number) => {
@@ -89,12 +93,25 @@ export const MainPage = () => {
 
   const printPagination = () => {
     const arrayTen = Array.from(Array(10).keys());
-    return arrayTen.map((number, index) => (
-      <div className={styles.pagintaionElement} key={`page_${index}`} onClick={()=>handlePaginationOnClick(index+1)}>
-        {index+1}
-      </div>
-    ));
+    return arrayTen.map((number, index) => {
+      const pageNumber = index + 1;
+      return (
+        <div
+          className={
+            currentPage === index + 1 && styles.currentPaginationElement
+          }
+          key={`page_${index}`}
+          onClick={() => handlePagination(pageNumber)}
+        >
+          {pageNumber}
+        </div>
+      );
+    });
   };
+
+  const oneBack = () => currentPage > 1 && handlePagination(currentPage - 1);
+  const oneForward = () =>
+    currentPage < 10 && handlePagination(currentPage + 1);
 
   return (
     <div className={styles.mainPage}>
@@ -115,7 +132,11 @@ export const MainPage = () => {
       {loading && <div className={styles.loading}>Loading... </div>}
       <div className={styles.beerList}>{printList()}</div>
 
-      <div className={styles.pagination}>{ printPagination()}</div>
+      <div className={styles.pagination}>
+        <div onClick={() => oneBack()}>&#60;</div>
+        {printPagination()}
+        <div onClick={() => oneForward()}>&#62;</div>
+      </div>
     </div>
   );
 };
